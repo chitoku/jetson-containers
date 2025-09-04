@@ -1,4 +1,4 @@
-name: vllm (dev)
+name: sound-utils (dev)
 
 on:
   pull_request:
@@ -50,13 +50,13 @@ jobs:
       - name: Show git repository state
         run: bash .github/workflows/scripts/git-status.sh
 
-      - name: Test build vllm package on orin
+      - name: Test build sound-utils package on orin
         id: package-test
-        run: bash .github/workflows/scripts/build-package.sh vllm
+        run: bash .github/workflows/scripts/build-package.sh sound-utils
 
       - name: Analyze build results
         if: always()
-        run: bash .github/workflows/scripts/analyze-results.sh vllm ${{ steps.package-test.outputs.stage1 }} ${{ steps.package-test.outputs.stage2 }} ${{ steps.package-test.outputs.build_status }}
+        run: bash .github/workflows/scripts/analyze-results.sh sound-utils ${{ steps.package-test.outputs.stage1 }} ${{ steps.package-test.outputs.stage2 }} ${{ steps.package-test.outputs.build_status }}
 
       - name: Test build results
-        run: bash .github/workflows/scripts/test-results-summary.sh vllm ${{ steps.package-test.outputs.stage1 }} ${{ steps.package-test.outputs.stage2 }} ${{ steps.package-test.outputs.build_status }} ${{ steps.package-test.outputs.failure_phase }} ${{ steps.package-test.outputs.failure_stage }} ${{ steps.package-test.outputs.failure_component }}
+        run: bash .github/workflows/scripts/test-results-summary.sh sound-utils ${{ steps.package-test.outputs.stage1 }} ${{ steps.package-test.outputs.stage2 }} ${{ steps.package-test.outputs.build_status }} ${{ steps.package-test.outputs.failure_phase }} ${{ steps.package-test.outputs.failure_stage }} ${{ steps.package-test.outputs.failure_component }}
