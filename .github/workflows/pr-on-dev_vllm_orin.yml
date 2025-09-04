@@ -22,6 +22,22 @@ jobs:
     name: "Package Build Test (Orin)"
 
     steps:
+      - name: Pre-checkout cleanup
+        run: |
+          echo "=== Pre-checkout Cleanup ==="
+          echo "Cleaning up permission-restricted files before checkout..."
+          sudo rm -rf /home/jetson/actions-runner/_work/jetson-containers/jetson-containers/data || echo "Data cleanup completed"
+          sudo rm -rf /home/jetson/actions-runner/_work/jetson-containers/jetson-containers/logs || echo "Logs cleanup completed"
+          echo "Pre-checkout cleanup completed"
+
+      - name: Checkout PR or Fork
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.event_name == 'workflow_dispatch' && inputs.fork_repo != '' && inputs.fork_repo || github.repository }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.fork_branch != '' && inputs.fork_branch || github.ref }}
+
       - name: Debug working directory
         run: |
           echo "=== Working Directory Debug ==="
@@ -44,18 +60,6 @@ jobs:
           ls -la .github/workflows/scripts/ || echo "No .github/workflows/scripts directory found"
           echo ""
           echo "PATH: $PATH"
-
-      - name: Pre-checkout cleanup
-        run: bash .github/workflows/scripts/pre-checkout-cleanup.sh
-
-      - name: Checkout PR or Fork
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.event_name == 'workflow_dispatch' && inputs.fork_repo != '' && inputs.fork_repo || github.repository }}
-          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.fork_branch != '' && inputs.fork_branch || github.ref }}
-
 
       - name: Display system info
         run: bash .github/workflows/scripts/system-info.sh
