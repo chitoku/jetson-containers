@@ -29,6 +29,7 @@ echo "Overall Status: $BUILD_STATUS"
 
 if [ "$BUILD_STATUS" = "success" ]; then
     echo "🎉 RESULT: $PACKAGE_NAME package SUCCESS on Jetson Orin"
+    exit 0
 else
     echo "💥 RESULT: $PACKAGE_NAME package FAILED on Jetson Orin"
     echo "Failure Phase: $FAILURE_PHASE"
@@ -37,4 +38,5 @@ else
     echo ""
     echo "❌ $PACKAGE_NAME Package Test (Orin) - FAILED in STAGE: $FAILURE_PHASE > $FAILURE_STAGE > $FAILURE_COMPONENT"
     echo "Check build logs above for detailed failure information"
+    exit 1
 fi
